@@ -1,23 +1,23 @@
 version: "3.7"
 
 services:
-  # db:
-  #   image: postgres
-  #   container_name: app-db
-  #   environment:
-  #     POSTGRES_DB: "app-db"
-  #     POSTGRES_USER: "user"
-  #     POSTGRES_PASSWORD: "password"
-  #     POSTGRES_ROOT_PASSWORD: "password"
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -d app-db -U user"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 20
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - db-volume:/var/lib/mysql
+  reservation-db:
+    image: postgres
+    container_name: reservation-app-db
+    environment:
+      POSTGRES_DB: "reservation-app-db"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_ROOT_PASSWORD: "password"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d app-db -U user"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-volume:/var/lib/mysql
 
   api-gateway:
     container_name: reservation-gateway-container
@@ -29,8 +29,8 @@ services:
       - ../api-gateway/.env.docker
     ports:
       - "8080:8080"
-    # depends_on:
-    #   - api-service
+    depends_on:
+      - api-service
 
   api-service:
     container_name: reservation-service-container
@@ -42,22 +42,22 @@ services:
     image: abeldlp/reservation-service
     ports:
       - "8081:8081"
-    # depends_on:
-    #   app-db:
-    #     condition: service_healthy
+    depends_on:
+      reservation-db:
+        condition: service_healthy
 
-  # auth-service:
-  #   container_name: auth-service-container
-  #   build:
-  #     dockerfile: ./Dockerfile
-  #     context: ../auth-service
-  #   env_file:
-  #     - ./auth-service/.env.docker
-  #   image: abeldlp/auth-service
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     app-db:
-  #       condition: service_healthy
-# volumes:
-#   db-volume:
+  auth-service:
+    container_name: auth-service-container
+    build:
+      dockerfile: ./Dockerfile
+      context: ../auth-service
+    env_file:
+      - ../auth-service/.env.docker
+    image: abeldlp/auth-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      reservation-db:
+        condition: service_healthy
+volumes:
+  db-volume:
