@@ -4,14 +4,15 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 )
 
 var Paths = map[string]string{
-	"reservations": "http://localhost:8081",
-	"auth":         "http://localhost:8082",
+	"reservations": os.Getenv("RESERVATION_SERVICE"),
+	"auth":         os.Getenv("AUTH_SERVICE"),
 }
 
 func ProxyRequestToServer(c *gin.Context) {

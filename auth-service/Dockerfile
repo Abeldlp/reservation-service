@@ -6,8 +6,8 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o api-service
+RUN go build -o auth-service
 
-EXPOSE 8081 
+EXPOSE 8082
 
-CMD [ "./api-service" ]
+CMD [ "./auth-service" ]
