@@ -22,9 +22,11 @@ services:
   api-gateway:
     container_name: reservation-gateway-container
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
       context: ../api-gateway
     image: abeldlp/reservation-gateway
+    volumes:
+      - ../api-gateway:/app
     env_file:
       - ../api-gateway/.env.docker
     ports:
@@ -35,8 +37,10 @@ services:
   api-service:
     container_name: reservation-service-container
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
       context: ../api-service
+    volumes:
+      - ../api-service:/app
     env_file:
       - ../api-service/.env.docker
     image: abeldlp/reservation-service
@@ -49,8 +53,10 @@ services:
   auth-service:
     container_name: auth-service-container
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: ./Dockerfile.dev
       context: ../auth-service
+    volumes:
+      - ../auth-service:/app
     env_file:
       - ../auth-service/.env.docker
     image: abeldlp/auth-service
