@@ -18,6 +18,12 @@ func GetAllUsers() []User {
 	return users
 }
 
+func GetUserByEmail(email string) User {
+	var user User
+	config.DB.Where("email = ?", email).First(&user)
+	return user
+}
+
 func CreateUser(user User) *gorm.DB {
 	return config.DB.Create(&user)
 }

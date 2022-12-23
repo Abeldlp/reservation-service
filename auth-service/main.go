@@ -18,6 +18,7 @@ func main() {
 	r := gin.Default()
 
 	routes.InitializeUserRoutes(r)
+	routes.InitializeAuthRoutes(r)
 
 	r.Run(":8082")
 }
