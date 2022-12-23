@@ -10,6 +10,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const CookieLifeTime = 36000
+
 func Login(c *gin.Context) {
 	var user models.User
 
@@ -29,11 +31,10 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	jwtToken := jwt.New(jwt.SigningMethodHS256)
-	jwtToken.Claims = jwt.MapClaims{
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": userFromDB.Username,
 		"email":    userFromDB.Email,
-	}
+	})
 
 	jwtTokenString, err := jwtToken.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
@@ -41,6 +42,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
+	c.SetCookie("token", jwtTokenString, CookieLifeTime, "/", "*", false, true)
 	c.JSON(http.StatusOK, gin.H{"token": jwtTokenString})
 }
 
@@ -76,5 +78,6 @@ func Register(c *gin.Context) {
 		return
 	}
 
+	c.SetCookie("token", jwtTokenString, CookieLifeTime, "/", "*", false, true)
 	c.JSON(http.StatusCreated, gin.H{"token": jwtTokenString})
 }
