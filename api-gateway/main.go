@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/Abeldlp/reservation-service/api-gateway/handlers"
+	"github.com/Abeldlp/reservation-service/api-gateway/middlewares"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -16,7 +17,7 @@ func main() {
 	}
 	r := gin.Default()
 
-	r.Any("/*proxyPath", handlers.ProxyRequestToServer)
+	r.Any("/*proxyPath", middlewares.LoginStatus, handlers.ProxyRequestToServer)
 
 	r.Run(":8080")
 }

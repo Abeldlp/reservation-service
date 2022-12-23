@@ -15,6 +15,10 @@ var Paths = map[string]string{
 	"auth":         os.Getenv("AUTH_SERVICE"),
 }
 
+var UnauthorizedPaths = []string{
+	"auth",
+}
+
 func ProxyRequestToServer(c *gin.Context) {
 	requestPath := c.Request.URL.Path
 	var service []string = strings.Split(requestPath, "/")
