@@ -24,6 +24,6 @@ func GetUserByEmail(email string) User {
 	return user
 }
 
-func CreateUser(user User) *gorm.DB {
+func CreateUser(user *User) *gorm.DB {
 	return config.DB.Create(&user)
 }

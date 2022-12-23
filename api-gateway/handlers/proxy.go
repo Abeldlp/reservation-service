@@ -5,8 +5,10 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 
+	"github.com/Abeldlp/reservation-service/api-gateway/models"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,8 +33,17 @@ func ProxyRequestToServer(c *gin.Context) {
 	}
 
 	proxy := httputil.NewSingleHostReverseProxy(remote)
+
+	hearders := c.Request.Header
+
+	user, ok := c.Get("user")
+	if ok {
+		id := strconv.FormatInt(user.(*models.Claims).ID, 10)
+		hearders.Add("user_id", id)
+	}
+
 	proxy.Director = func(req *http.Request) {
-		req.Header = c.Request.Header
+		req.Header = hearders
 		req.Host = remote.Host
 		req.URL.Scheme = remote.Scheme
 		req.URL.Host = remote.Host

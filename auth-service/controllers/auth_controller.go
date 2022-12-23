@@ -32,6 +32,7 @@ func Login(c *gin.Context) {
 	}
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":       userFromDB.ID,
 		"username": userFromDB.Username,
 		"email":    userFromDB.Email,
 	})
@@ -61,13 +62,14 @@ func Register(c *gin.Context) {
 	}
 
 	user.Password = string(bcryptPassword)
-	if err := models.CreateUser(user).Error; err != nil {
+	if err := models.CreateUser(&user).Error; err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
 	jwtToken := jwt.New(jwt.SigningMethodHS256)
 	jwtToken.Claims = jwt.MapClaims{
+		"id":       user.ID,
 		"username": user.Username,
 		"email":    user.Email,
 	}

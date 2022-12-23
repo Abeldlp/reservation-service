@@ -14,6 +14,6 @@ func GetAll(c *gin.Context) {
 func Create(c *gin.Context) {
 	var user models.User
 	c.BindJSON(&user)
-	models.CreateUser(user)
+	models.CreateUser(&user)
 	c.JSON(http.StatusOK, user)
 }

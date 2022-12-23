@@ -1,6 +1,7 @@
 package models
 
 type Claims struct {
+	ID         int64  `json:"id"`
 	Username   string `json:"username"`
 	Email      string `json:"email"`
 	ValidToken bool   `json:"valid_token"`
