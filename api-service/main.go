@@ -1,20 +1,20 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/Abeldlp/reservation-service/api-service/config"
+	"github.com/Abeldlp/reservation-service/api-service/routes"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		user := c.GetHeader("user_id")
 
-		c.JSON(http.StatusOK, gin.H{
-			"user_id": user,
-			"message": "reservation-service-pong",
-		})
-	})
+	config.InitializeDatabase()
+
+	routes.InitializeAppointmentRoutes(r)
+	routes.InitializeDoctorRoutes(r)
+	routes.InitializePatientRoutes(r)
+	routes.InitializeSpecialityRoutes(r)
+
 	r.Run(":8081")
 }
